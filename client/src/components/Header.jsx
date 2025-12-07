@@ -15,15 +15,15 @@ const Header = () => {
         </Link>
         
 
-        <form className="bg-slate-100 p-3 rounded-lg flex items-center w-24 sm:w-64">
+        <form className="bg-slate-100 p-3 rounded-lg flex items-center w-23 sm:w-57">
           <input 
             type="text" 
             className="bg-transparent outline-none focus:outline-none"
-            placeholder="Search..."
+            placeholder="  Search...    "
           />
-          <FaSearch className="text-slate-600" />
+          <FaSearch className="text-slate-600"/>
         </form>
-        <ul className="flex gap-4">
+        <ul className="flex gap-20">
           <Link to="/">
             <li className="hidden sm:inline text-slate-700 hover:underline">Home</li>
           </Link>
