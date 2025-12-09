@@ -1,7 +1,8 @@
 import User from "../models/user.model.js";
 import bcryptjs from 'bcryptjs';
+import { errorHandler } from "../utils/error.js";
 
-export const signup = async(req,res)=>{
+export const signup = async(req,res,next)=>{
     
     // console.log(req.body)
     // to save in data dease
@@ -24,6 +25,14 @@ export const signup = async(req,res)=>{
         await newUser.save();
         res.status(201).json({ message: "created successfully" });
     }catch(err){
-        res.status(500).json(err.message);
+    //     res.status(500).json(err.message);
+    // }//up is not the best way to handle errors 
+
+    //instead of this up part use middleware
+        next(err);
     }
+
+
+
+
 }
