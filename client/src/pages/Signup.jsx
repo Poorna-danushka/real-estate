@@ -1,127 +1,104 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import './Signup.css';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import OAuth from "../components/OAuth";
 
 const Signup = () => {
-
-  // This will store the values of username, email, password
   const [formData, setFormData] = useState({});
-
-  // This stores any error message from backend (ex: username already exists)
   const [error, setError] = useState("");
-
-  // Used to show the loading button while sending data to backend
   const [loading, setLoading] = useState(false);
 
-  // ✅ Needed for redirect after signup
   const navigate = useNavigate();
 
-  // This function runs whenever a user types inside an input box
   const handleChange = (e) => {
-
-    // Update formData object with new input values
     setFormData({
-      ...formData,                     // keep previous values
-      [e.target.id]: e.target.value,   // update the field (username/email/password)
+      ...formData,
+      [e.target.id]: e.target.value,
     });
   };
 
-  // This function runs when the user clicks the Sign Up button
   const handleSubmit = async (e) => {
-
-    e.preventDefault(); // prevent page reload
-
-    setLoading(true);   // show loading button
-    setError("");       // clear previous error
+    e.preventDefault();
+    setLoading(true);
+    setError("");
 
     try {
-
-      // Send form data to backend API
-      const res = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json', // tell backend we send JSON
-        },
-        body: JSON.stringify(formData),       // send username/email/password as JSON
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
 
-      // Read response from backend
       const data = await res.json();
 
-      // If backend sends success:false → show error to user
       if (data.success === false) {
         setError(data.message);
         setLoading(false);
         return;
       }
 
-      // If everything ok → stop loading
       setLoading(false);
-
-      // ✅ Redirect to sign-in page
-      navigate('/sign-in');
-
+      navigate("/sign-in");
     } catch (err) {
-
-      // If server is down / network error
       setError("Something went wrong");
       setLoading(false);
     }
-
   };
 
   return (
-    <div id="signup-container">
-      
-      {/* Page Title */}
-      <h1 id="signup-title">Sign Up</h1>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
 
-      {/* Signup Form */}
-      <form id="signup-form" onSubmit={handleSubmit}>
+      <div className="w-full max-w-md bg-white p-8 rounded-xl shadow-lg">
 
-        {/* Username Input */}
-        <input
-          type="text"
-          placeholder="username"
-          id="username"
-          onChange={handleChange}
-        />
+        <h1 className="text-3xl font-semibold text-center mb-6 text-gray-800">
+          Sign Up
+        </h1>
 
-        {/* Email Input */}
-        <input
-          type="email"
-          placeholder="email"
-          id="email"
-          onChange={handleChange}
-        />
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 
-        {/* Password Input */}
-        <input
-          type="password"
-          placeholder="password"
-          id="password"
-          onChange={handleChange}
-        />
+          <input
+            type="text"
+            id="username"
+            placeholder="Username"
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
 
-        {/* Sign Up Button */}
-        {/* Disabled when loading */}
-        <button disabled={loading} id="signup-btn">
-          {loading ? 'Loading...' : 'Sign Up'}
-        </button>
+          <input
+            type="email"
+            id="email"
+            placeholder="Email"
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
 
-      </form>
+          <input
+            type="password"
+            id="password"
+            placeholder="Password"
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
 
-      {/* Error Message (if exists) */}
-      {error && <p style={{ color: "red", marginTop: "10px" }}>{error}</p>}
+          <button
+            disabled={loading}
+            className={`w-full py-2 mt-2 text-white rounded-lg transition 
+              ${loading ? "bg-gray-400" : "bg-indigo-600 hover:bg-indigo-700"}`}
+          >
+            {loading ? "Loading..." : "Sign Up"}
+          </button>
+        <OAuth/>
+        </form>
 
-      {/* Footer with link to Sign In page */}
-      <div id="signup-footer">
-        <p>Have an account?</p>
+        {error && (
+          <p className="text-red-500 text-center mt-3">{error}</p>
+        )}
 
-        {/* Router Link */}
-        <Link to="/sign-in" id="signin-link">
-          Sign in
-        </Link>
+        <div className="text-center mt-5">
+          <p className="text-gray-600">Have an account?</p>
+          <Link to="/sign-in" className="text-indigo-600 hover:underline">
+            Sign In
+          </Link>
+        </div>
       </div>
     </div>
   );
