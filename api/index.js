@@ -50,3 +50,7 @@ app.use((err,req,res,next)=>{
         message,
     })//use in auth control js
 })
+
+import userRoutes from "./routes/user.route.js";
+
+app.use("/api/user", userRoutes);

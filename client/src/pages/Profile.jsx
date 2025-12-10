@@ -7,12 +7,15 @@ import {
 } from '../redux/user/userSlice';
 
 import { useNavigate } from "react-router-dom";
+import {useRef} from 'react'
 
 
 const Profile = () => {
+
   const { currentUser } = useSelector((state) => state.user);
-   const navigate = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const fileref=useRef(null)
 
   const handleSignOut = async () => {
     try {
@@ -36,16 +39,19 @@ const Profile = () => {
       dispatch(deleteUserFailure(error.message));
     }
   };
+  
 
   return (
     <div className="flex flex-col items-center justify-center bg-gray-100 p-10">
 
       {/* User Avatar */}
-      <img
+      <input type='file' ref={fileref} hidden accept='image/*'/>
+      <img onClick={()=>fileref.current.click()}
         className="rounded-full w-50 h-50 object-cover shadow-lg"
         src={currentUser?.avatar || "/default-avatar.png"}
         alt="User Avatar"
       />
+      
 
       {/* User Name */}
       <h1 className="text-2xl font-semibold text-gray-800 mt-4">
